@@ -181,20 +181,25 @@ public class MASpawnThread implements Runnable
 
     private void spawnWave(int wave) {
         Wave w = waveManager.next();
-        handleWave(w, wave, false);
+        handleWave(w, wave, true);
+
+        Wave sw = waveManager.getCurrentShadow();
+        if (sw != null) {
+            handleWave(sw, wave, false);
+        }
     }
 
-    private void handleWave(Wave w, int wave, boolean comboChild) {
+    private void handleWave(Wave w, int wave, boolean announce) {
         if (w.getType() == WaveType.COMBO) {
             ComboWave cw = (ComboWave) w;
-            handleWave(cw.getWaveA(), wave, true);
-            handleWave(cw.getWaveB(), wave, true);
+            handleWave(cw.getWaveA(), wave, false);
+            handleWave(cw.getWaveB(), wave, false);
 
             cw.getWaveA().announce(arena, wave); // announce only waveA in outermost COMBO wave.
             return;
         }
 
-        if (!comboChild) {
+        if (announce) {
             w.announce(arena, wave);
         }
 
