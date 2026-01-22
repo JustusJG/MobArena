@@ -196,7 +196,7 @@ public class MASpawnThread implements Runnable
             handleWave(cw.getWaveB(), wave, false);
 
 
-            if (!comboChild) {
+            if (!announce) {
                 cw.getWaveA().announce(arena, wave); // announce only waveA in outermost COMBO wave.
             }
             return;
