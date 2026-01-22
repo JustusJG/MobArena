@@ -47,5 +47,9 @@ public interface Thing extends ThingPicker {
     default Thing pick() {
         return this;
     }
+    @Override
+    default Thing pick(Player player) {
+        return this.pick();
+    }
 
 }

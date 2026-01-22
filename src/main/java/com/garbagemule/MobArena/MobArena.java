@@ -21,11 +21,7 @@ import com.garbagemule.MobArena.metrics.MonsterInfightChart;
 import com.garbagemule.MobArena.metrics.PvpEnabledChart;
 import com.garbagemule.MobArena.signs.SignBootstrap;
 import com.garbagemule.MobArena.signs.SignListeners;
-import com.garbagemule.MobArena.things.NothingPickerParser;
-import com.garbagemule.MobArena.things.RandomThingPickerParser;
-import com.garbagemule.MobArena.things.ThingGroupPickerParser;
-import com.garbagemule.MobArena.things.ThingManager;
-import com.garbagemule.MobArena.things.ThingPickerManager;
+import com.garbagemule.MobArena.things.*;
 import com.garbagemule.MobArena.util.config.ConfigUtils;
 import com.garbagemule.MobArena.waves.ability.AbilityManager;
 import org.bstats.bukkit.Metrics;
@@ -73,6 +69,7 @@ public class MobArena extends JavaPlugin
         thingman = new ThingManager(this);
 
         pickman = new ThingPickerManager(thingman);
+        pickman.register(new ClassSpecificThingPickerParser(pickman, this));
         pickman.register(new ThingGroupPickerParser(pickman));
         pickman.register(new RandomThingPickerParser(pickman, random));
         pickman.register(new NothingPickerParser());

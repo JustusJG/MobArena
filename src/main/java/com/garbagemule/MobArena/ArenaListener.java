@@ -623,7 +623,7 @@ public class ArenaListener
                     }
                     ThingPicker picker = boss.getReward();
                     if (picker != null) {
-                        Thing reward = picker.pick();
+                        Thing reward = picker.pick(p);
                         if (reward != null) {
                             arena.getRewardManager().addReward(p, reward);
                             arena.getMessenger().tell(damager, Msg.WAVE_BOSS_REWARD_EARNED, reward.toString());

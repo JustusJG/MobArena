@@ -1,5 +1,7 @@
 package com.garbagemule.MobArena.things;
 
+import org.bukkit.entity.Player;
+
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -16,8 +18,13 @@ public class RandomThingPicker implements ThingPicker {
 
     @Override
     public Thing pick() {
+        return this.pick(null);
+    }
+
+    @Override
+    public Thing pick(Player player) {
         int index = random.nextInt(pickers.size());
-        return pickers.get(index).pick();
+        return pickers.get(index).pick(player);
     }
 
     @Override

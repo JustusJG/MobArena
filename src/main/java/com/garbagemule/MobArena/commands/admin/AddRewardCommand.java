@@ -57,7 +57,7 @@ public class AddRewardCommand implements Command {
         Thing thing;
         try {
             ThingPicker picker = am.getPlugin().getThingPickerManager().parse(input);
-            thing = picker.pick();
+            thing = picker.pick(player);
         } catch (Exception e) {
             am.getGlobalMessenger().tell(sender, e.getMessage());
             return true;

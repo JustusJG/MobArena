@@ -35,5 +35,4 @@ public class ThingGroup implements Thing {
             .map(Thing::toString)
             .collect(Collectors.joining(" and "));
     }
-
 }

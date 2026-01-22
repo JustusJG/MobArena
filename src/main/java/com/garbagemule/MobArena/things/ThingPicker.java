@@ -1,5 +1,7 @@
 package com.garbagemule.MobArena.things;
 
+import org.bukkit.entity.Player;
+
 /**
  * Pickers encapsulate a type of highly specific Factory pattern that revolves
  * around choosing from an arbitrary pool of Thing instances without directly
@@ -18,5 +20,14 @@ public interface ThingPicker {
      * @return a {@link Thing} instance, or null
      */
     Thing pick();
+
+    /**
+     * Pick a thing, specific for a player.
+     *
+     * @param player the player who gets the thing.
+     *
+     * @return a {@link Thing} instance, or null
+     */
+    Thing pick(Player player);
 
 }

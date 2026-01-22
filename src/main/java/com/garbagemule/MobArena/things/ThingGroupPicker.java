@@ -1,5 +1,7 @@
 package com.garbagemule.MobArena.things;
 
+import org.bukkit.entity.Player;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -14,10 +16,15 @@ public class ThingGroupPicker implements ThingPicker {
 
     @Override
     public Thing pick() {
+        return this.pick(null);
+    }
+
+    @Override
+    public Thing pick(Player player) {
         List<Thing> things = pickers.stream()
-            .map(ThingPicker::pick)
-            .filter(Objects::nonNull)
-            .collect(Collectors.toList());
+                .map(thingPicker -> thingPicker.pick(player))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
 
         if (things.isEmpty()) {
             return null;

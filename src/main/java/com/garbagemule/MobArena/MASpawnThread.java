@@ -398,7 +398,7 @@ public class MASpawnThread implements Runnable
      */
     private void addReward(ThingPicker picker) {
         for (Player p : arena.getPlayersInArena()) {
-            Thing reward = picker.pick();
+            Thing reward = picker.pick(p);
             if (reward != null) {
                 rewardManager.addReward(p, reward);
                 arena.getMessenger().tell(p, Msg.WAVE_REWARD, reward.toString());
