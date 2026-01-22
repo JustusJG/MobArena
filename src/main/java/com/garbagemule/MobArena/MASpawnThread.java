@@ -9,10 +9,7 @@ import com.garbagemule.MobArena.region.ArenaRegion;
 import com.garbagemule.MobArena.things.ExperienceThing;
 import com.garbagemule.MobArena.things.Thing;
 import com.garbagemule.MobArena.things.ThingPicker;
-import com.garbagemule.MobArena.waves.MABoss;
-import com.garbagemule.MobArena.waves.MACreature;
-import com.garbagemule.MobArena.waves.Wave;
-import com.garbagemule.MobArena.waves.WaveManager;
+import com.garbagemule.MobArena.waves.*;
 import com.garbagemule.MobArena.waves.enums.WaveType;
 import com.garbagemule.MobArena.waves.types.BossWave;
 import com.garbagemule.MobArena.waves.types.ComboWave;
@@ -184,7 +181,7 @@ public class MASpawnThread implements Runnable
         handleWave(w, wave, true);
 
         Wave sw = waveManager.getCurrentShadow();
-        if (sw != null) {
+        if (sw != null && WaveUtils.waveBlocked(sw, w.getShadowBlacklist())) {
             handleWave(sw, wave, false);
         }
     }
@@ -192,11 +189,13 @@ public class MASpawnThread implements Runnable
     private void handleWave(Wave w, int wave, boolean announce) {
         if (w.getType() == WaveType.COMBO) {
             ComboWave cw = (ComboWave) w;
-            handleWave(cw.getWaveA(), wave, false);
+
+            Wave waveA = cw.getWaveA();
+            handleWave(cw.getWaveA(), wave, waveA.getType() == WaveType.COMBO);
             handleWave(cw.getWaveB(), wave, false);
 
 
-            if (announce) {
+            if (announce && waveA.getType() != WaveType.COMBO) {
                 cw.getWaveA().announce(arena, wave); // announce only waveA in outermost COMBO wave.
             }
             return;

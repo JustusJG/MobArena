@@ -22,16 +22,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class WaveParser
@@ -138,6 +129,7 @@ public class WaveParser
         result.setFirstWave(firstWave);
         result.setPriority(priority);
         result.setFrequency(frequency);
+        result.setShadowBlacklist(Optional.ofNullable(config.getString("noshadow")).orElse(""));
 
         // And the multipliers.
         result.setHealthMultiplier(healthMultiplier);
