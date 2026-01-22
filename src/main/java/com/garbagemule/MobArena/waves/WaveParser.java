@@ -15,12 +15,7 @@ import com.garbagemule.MobArena.waves.ability.Ability;
 import com.garbagemule.MobArena.waves.ability.AbilityManager;
 import com.garbagemule.MobArena.waves.enums.WaveBranch;
 import com.garbagemule.MobArena.waves.enums.WaveType;
-import com.garbagemule.MobArena.waves.types.BossWave;
-import com.garbagemule.MobArena.waves.types.DefaultWave;
-import com.garbagemule.MobArena.waves.types.SpecialWave;
-import com.garbagemule.MobArena.waves.types.SupplyWave;
-import com.garbagemule.MobArena.waves.types.SwarmWave;
-import com.garbagemule.MobArena.waves.types.UpgradeWave;
+import com.garbagemule.MobArena.waves.types.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -98,6 +93,9 @@ public class WaveParser
             case BOSS:
                 result = parseBossWave(arena, name, config);
                 break;
+            case COMBO:
+                result = parseComboWave(arena, name, config);
+                break;
         }
 
         // Grab the branch-specific nodes.
@@ -122,7 +120,7 @@ public class WaveParser
         // Potion effects
         List<PotionEffect> effects = getPotionEffects(arena, name, config);
 
-        // Recurrent must have priority + frequency, single must have firstWave
+        // Recurrent must have priority + frequency, single must have firstWave, combo doesn't need this
         if (branch == WaveBranch.RECURRENT) {
             if (priority <= 0) {
                 throw new ConfigError("Missing or invalid 'priority' node for recurrent wave " + name + " of arena " + arena.configName());
@@ -348,6 +346,21 @@ public class WaveParser
         result.setDrops(stacks);
 
         return result;
+    }
+
+    private static Wave parseComboWave(Arena arena, String name, ConfigurationSection config) {
+        ConfigurationSection waveAConfig = config.getConfigurationSection("waveA");
+        if (waveAConfig == null) {
+            throw new ConfigError("No waveA defined in wave " + name + " of arena " + arena.configName() + ".");
+        }
+        Wave waveA = parseWave(arena, name, waveAConfig, WaveBranch.COMBO);
+        ConfigurationSection waveBConfig = config.getConfigurationSection("waveB");
+        if (waveBConfig == null) {
+            throw new ConfigError("No waveB defined in wave " + name + " of arena " + arena.configName() + ".");
+        }
+        Wave waveB = parseWave(arena, name, waveBConfig, WaveBranch.COMBO);
+
+        return new ComboWave(waveA, waveB);
     }
 
     /**
