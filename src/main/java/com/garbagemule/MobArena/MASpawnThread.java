@@ -15,6 +15,7 @@ import com.garbagemule.MobArena.waves.Wave;
 import com.garbagemule.MobArena.waves.WaveManager;
 import com.garbagemule.MobArena.waves.enums.WaveType;
 import com.garbagemule.MobArena.waves.types.BossWave;
+import com.garbagemule.MobArena.waves.types.ComboWave;
 import com.garbagemule.MobArena.waves.types.SupplyWave;
 import com.garbagemule.MobArena.waves.types.UpgradeWave;
 import org.bukkit.Bukkit;
@@ -180,8 +181,22 @@ public class MASpawnThread implements Runnable
 
     private void spawnWave(int wave) {
         Wave w = waveManager.next();
+        handleWave(w, wave, false);
+    }
 
-        w.announce(arena, wave);
+    private void handleWave(Wave w, int wave, boolean comboChild) {
+        if (w.getType() == WaveType.COMBO) {
+            ComboWave cw = (ComboWave) w;
+            handleWave(cw.getWaveA(), wave, true);
+            handleWave(cw.getWaveB(), wave, true);
+
+            cw.getWaveA().announce(arena, wave); // announce only waveA in outermost COMBO wave.
+            return;
+        }
+
+        if (!comboChild) {
+            w.announce(arena, wave);
+        }
 
         arena.getScoreboard().updateWave(wave);
 
