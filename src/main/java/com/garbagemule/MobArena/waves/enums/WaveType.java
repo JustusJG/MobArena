@@ -50,7 +50,7 @@ public enum WaveType
     COMBO {
         @Override
         public void announce(Arena arena, int wave) {
-            // announce waveA in MASpawnThread.handleWave()
+            // announce waveA in MASpawnThread.handleWave(Wave, int, boolean)
         }
     };
 
